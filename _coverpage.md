@@ -1,12 +1,11 @@
 ![logo](_media/icon.svg)
 
-# docsify <small>4.9.4</small>
+# Obey Tools <small> for SideFX Houdini</small>
 
-> A magical documentation site generator.
+> Right tools for every production needs
 
-- Simple and lightweight (~21kB gzipped)
-- No statically built html files
-- Multiple themes
+- Simple and lightweight
+- Fast and furious
+- Just trying to get this
 
-[GitHub](https://github.com/docsifyjs/docsify/)
-[Getting Started](#docsify)
+
