@@ -1,0 +1,156 @@
+
+import hou
+
+#store_vex_code
+
+vex_code = '''string ptgrps[] = detailintrinsic(0, "primitivegroups");
+s[]@ptingrps = {};
+foreach(string grp;ptgrps)
+{
+    if (inprimgroup(0, grp, @primnum)) append(s[]@ptingrps, grp);
+}
+int i=1;
+if (len(@ptingrps) > 1) {
+string gr;
+while (len(@ptingrps)>1 ) {
+gr = pop(@ptingrps);
+setprimgroup(0,gr,@primnum,0,"set");
+}
+}
+if (len(@ptingrps) == 0) setprimgroup(0,"notInGroup",@primnum,1,"set");'''
+
+selectedNodes = hou.selectedNodes()
+
+#Premade nodes
+
+#find where we are from first selected node
+  
+    
+first=hou.selectedNodes()[0]
+rootpath=first.path()
+rootname=first.name()
+
+#extract only path
+
+finpath=rootpath.split(rootname)[0]
+obj = hou.node(finpath)
+
+#create final merge 
+
+
+
+
+for n in selectedNodes:
+    
+    #Define counter for futher use
+    counter = 1;
+    
+    fin_mrg=obj.createNode('merge','Collect_Back_')
+    
+    #extract groups names
+    
+    groups = n.geometry().primGroups()
+    
+    #find groups count
+    
+    grpLen=float(len(groups)+1)
+    
+    #find curnode pos
+    
+    nPosX=n.position()[0]
+    
+    #Attrib Wrangle node create and set vex code
+    vexN = n.createOutputNode('attribwrangle',"SET_TO_EMPTY")
+    vexN.parm('class').set(1)   
+    vexN.parm("snippet").set(vex_code)
+    
+    #Assign color to it
+    vexN.setColor(hou.Color([0.6,0.5,0.8]))
+    
+    #Create attrdelete node 
+    atrDel=vexN.createOutputNode('attribdelete',"Clean_Attributes")
+    atrDel.parm('primdel').set('ptingrps')
+    
+    #Assign color to attribute delete
+    atrDel.setColor(hou.Color([0.5,0.3,0.7]))
+    
+    #Create first blast for prinitives not in group
+    NotInGrp = atrDel.createOutputNode('blast','NotInGrp')
+    NotInGrp.parm('group').set('notInGroup')
+    NotInGrp.parm('negate').set(1)
+    
+    #Calculate x position move unit
+    
+    if grpLen < 3:
+        unitX = 2.0
+    elif grpLen == 3:
+        unitX = 2.0
+    else:
+        unitX=(grpLen)/(grpLen-2)
+    
+    
+    
+    #Calculate First position
+    if grpLen <3:
+        firstPosX=-1+nPosX
+    elif grpLen == 3:
+        firstPosX=-2+nPosX
+    
+    else:
+        firstPosX=-(grpLen+2)/2+nPosX;
+    firstPosY=atrDel.position()[1]-1
+    firstPos=hou.Vector2(firstPosX,firstPosY)
+    
+    
+    #Position first blast node and color it
+    NotInGrp.setPosition(firstPos)
+    NotInGrp.setColor(hou.Color([0.5,0,0.7]))
+    
+    
+    
+    #Create Out Null for primitives not in group
+    NotInGrpNull = NotInGrp.createOutputNode('null','OUT_' + "Not_In_Grp_")
+    NotInGrpNull.setColor(hou.Color([0.7,0,0.7]))
+    NotInGrpNull.moveToGoodPosition()
+    
+    #Connect input to Final Merge node 
+    fin_mrg.setInput(0,NotInGrpNull)
+     
+    
+    #Group Logic
+    for group in groups:
+        
+        #Separate groups with help ofprint(grpLen) Blast node
+        #Set its parameters
+        blastN = atrDel.createOutputNode('blast',group.name() + "_")
+        blastN.parm('group').set(group.name())
+        blastN.parm('negate').set(1)
+        
+         #Calculate Second position
+        if grpLen != 3:
+            secPosX=(float((counter+1))-grpLen/2)*unitX+nPosX-unitX/2
+        else:
+            secPosX=float(counter-1)*unitX+nPosX
+        
+        secPos=hou.Vector2(secPosX,firstPosY)
+        
+        #Color and position blast node
+        blastN.setPosition(secPos)
+        blastN.setColor(hou.Color([0.5,0,0.7]))
+              
+        
+        #Create output Null
+        outNull = blastN.createOutputNode('null','OUT_' + group.name() + "_")
+        outNull.setColor(hou.Color([0.7,0,0.7]))
+        
+        thirdPosY=firstPosY-1
+        thirdPos=hou.Vector2(secPosX,thirdPosY)
+        outNull.setPosition(thirdPos)
+        
+        #Connect inputs to final merge
+        fin_mrg.setInput(counter,outNull)
+        counter = counter + 1
+        
+        
+    fin_mrg.moveToGoodPosition()
+    fin_mrg.setColor(hou.Color([0.4,0,0.6]))       
