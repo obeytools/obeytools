@@ -4,8 +4,9 @@
 
 > Right tools for every production needs
 
+
 - Simple and lightweight
-- Fast and furious
-- Just trying to get this
+- Advanced motion graphics effects
+
 
 
