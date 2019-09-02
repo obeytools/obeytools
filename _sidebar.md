@@ -1,9 +1,10 @@
 - Getting started
 
   - [Quick start](quickstart.md)
+  - [Code Snippets](codeSnip.md)
 
 
-- Guide
+- Knowledge
 
   - [Usefull links](deploy.md)
 
