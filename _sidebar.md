@@ -1,13 +1,13 @@
 - Getting started
 
   - [Quick start](quickstart.md)
+  - [Basic Tools](basicTools.md)
   - [Code Snippets](codeSnip.md)
 
 
 - Knowledge
 
-#  - [Usefull links](deploy.md)
- - [Usefull links](links.md)
+  - [Usefull links](links.md)
 
 
 
