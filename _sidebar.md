@@ -5,7 +5,7 @@
 
 - Guide
 
-  - [Deploy](deploy.md)
+  - [Usefull links](deploy.md)
 
 
 
