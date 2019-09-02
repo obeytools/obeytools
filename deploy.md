@@ -2,7 +2,8 @@
 
 ### VEX
 
-http://www.tokeru.com/cgwiki/index.php?title=HoudiniVex  
+http://www.tokeru.com/cgwiki/index.php?title=HoudiniVex  <br>
+http://www.tokeru.com/cgwiki/index.php?title=JoyOfVex
 
 
 
