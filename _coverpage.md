@@ -5,7 +5,7 @@
 > Right tools for every production needs
 
 
-- Simple and lightweight
+- Lightweight, optimized for multithreading use
 - Advanced motion graphics effects
 
 
