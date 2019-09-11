@@ -15,3 +15,4 @@ and put this variable into $HOUDINI_PATH
 HOUDINI_PATH = $HOUDINI_PATH;$oTools;&
 ```
 
+All hail Hydra and Obey
